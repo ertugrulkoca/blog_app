@@ -10,7 +10,7 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar("Login"),
+      appBar: appBarLogin("Login"),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -35,12 +35,12 @@ class RegisterView extends StatelessWidget {
                   Icon(Icons.lock, color: Colors.grey.shade400),
                   Icon(Icons.remove_red_eye, color: Colors.grey.shade400)),
               customSizedBox(30),
-              loginRegisterButton("Register", white, dark, (() {
+              loginRegisterButton("Register", white, dark, Icons.login, (() {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => RegisterView()));
               })),
               customSizedBox(20),
-              loginRegisterButton("Login", dark, white, (() {
+              loginRegisterButton("Login", dark, white, Icons.login, (() {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => RegisterView()));
               })),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'components/home_components.dart';
+import '../home/components/home_components.dart';
 
 class MyFavorites extends StatelessWidget {
   const MyFavorites({Key? key}) : super(key: key);

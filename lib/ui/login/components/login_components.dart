@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/constants.dart';
 
-AppBar appBar(String text) {
+AppBar appBarLogin(String text) {
   return AppBar(
     title: Text(text,
         style:
@@ -29,8 +29,8 @@ SizedBox customSizedBox(double size) {
   return SizedBox(height: size);
 }
 
-SizedBox loginRegisterButton(
-    String text, Color textColor, backgroundColor, void Function() fun) {
+SizedBox loginRegisterButton(String text, Color textColor,
+    Color backgroundColor, IconData icon, void Function() fun) {
   return SizedBox(
     width: double.infinity,
     height: 60,

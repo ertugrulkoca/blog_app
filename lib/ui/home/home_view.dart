@@ -1,4 +1,4 @@
-import 'package:blog_app_assignment/ui/home/my_favorites_view.dart';
+import 'package:blog_app_assignment/ui/favorites/my_favorites_view.dart';
 import 'package:flutter/material.dart';
 
 import 'components/home_components.dart';

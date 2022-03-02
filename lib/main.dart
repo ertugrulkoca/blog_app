@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ui/home/home_view.dart';
-import 'ui/home/my_favorites_view.dart';
+import 'ui/favorites/my_favorites_view.dart';
 import 'ui/login/login_view.dart';
+import 'ui/profile/profile_view.dart';
 
 void main() => runApp(const MyApp());
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
             const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
       ),
       title: 'Blog App',
-      home: MyFavorites(),
+      home: ProfileView(),
     );
   }
 }
