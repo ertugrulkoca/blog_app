@@ -2,6 +2,8 @@ import 'package:blog_app_assignment/ui/home/home_view.dart';
 import 'package:flutter/material.dart';
 import '../../constants/constants.dart';
 import '../../core/helper/shared_manager.dart';
+import '../../core/service/account_service.dart';
+import '../../core/service/blog_service.dart';
 import '../../core/service/login_service.dart';
 import '../components/ui_components.dart';
 import 'components/login_components.dart';
@@ -29,6 +31,11 @@ class _LoginViewState extends State<LoginView> {
             (Route<dynamic> route) => false);
       }
     });
+    // BlogService.instance.getCategories();
+    // BlogService.instance.getBlogs(null);
+    // BlogService.instance.toggleFavorite("620ceebbc8312d04eec2be97");
+    // AccountService.instance.getAccount();
+    AccountService.instance.accountUpdate("string", "string", "string");
   }
 
   @override

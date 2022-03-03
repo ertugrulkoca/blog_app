@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:blog_app_assignment/core/model/signModel.dart';
+import 'package:blog_app_assignment/core/model/sign_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../helper/shared_manager.dart';
