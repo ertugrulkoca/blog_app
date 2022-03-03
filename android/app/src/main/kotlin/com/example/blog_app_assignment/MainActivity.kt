@@ -1,4 +1,4 @@
-package com.example.qa_application
+package com.example.blog_app_assignment
 
 import io.flutter.embedding.android.FlutterActivity
 

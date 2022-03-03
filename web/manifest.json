@@ -1,6 +1,6 @@
 {
-    "name": "qa_application",
-    "short_name": "qa_application",
+    "name": "blog_app_assignment",
+    "short_name": "blog_app_assignment",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

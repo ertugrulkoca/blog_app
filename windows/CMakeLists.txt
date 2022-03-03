@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(qa_application LANGUAGES CXX)
+project(blog_app_assignment LANGUAGES CXX)
 
-set(BINARY_NAME "qa_application")
+set(BINARY_NAME "blog_app_assignment")
 
 cmake_policy(SET CMP0063 NEW)
 
