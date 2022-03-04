@@ -32,9 +32,6 @@ class BlogService {
           if (BlogCategory.fromJson(jsonDecode(response.body)).data != null) {
             List<BlogCategoryData> items =
                 BlogCategory.fromJson(jsonDecode(response.body)).data!;
-            for (var item in items) {
-              print(item);
-            }
             return items;
           } else {
             print("data boş");
@@ -74,9 +71,6 @@ class BlogService {
           if (Blogs.fromJson(jsonDecode(response.body)).data != null) {
             List<BlogData> items =
                 Blogs.fromJson(jsonDecode(response.body)).data!;
-            for (var item in items) {
-              print(item);
-            }
             return items;
           } else {
             print("data boş");
@@ -116,7 +110,6 @@ class BlogService {
               null) {
             String mesaj =
                 ToggleFavorite.fromJson(jsonDecode(response.body)).message!;
-            print(mesaj);
             return mesaj;
           } else {
             print("data boş");

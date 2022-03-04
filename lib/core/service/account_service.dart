@@ -4,13 +4,16 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 
+import '../model/blog_model.dart';
+import 'blog_service.dart';
+
 class AccountService {
   AccountService._();
   static final AccountService _instance = AccountService._();
   static AccountService get instance => _instance;
   final String _api = "test20.internative.net";
 
-  Future<AccountData?> getAccount() async {
+  Future<AccountData> getAccount() async {
     var url = Uri.http(_api, "/Account/Get");
     String token =
         await SharedManager.instance.getStringValue(SharedKeys.TOKEN);
@@ -28,7 +31,6 @@ class AccountService {
           if (Account.fromJson(jsonDecode(response.body)).data != null) {
             AccountData item =
                 Account.fromJson(jsonDecode(response.body)).data!;
-            print(item);
             return item;
           } else {
             print("data boş");
@@ -41,7 +43,25 @@ class AccountService {
         print("unauthorized");
         break;
     }
-    return null;
+    return AccountData();
+  }
+
+  Future<List<BlogData>> getFavoriBlogs() async {
+    List<BlogData> blogs = await BlogService.instance.getBlogs(null);
+    List<String> favList = [];
+    List<BlogData> checkFavList = [];
+    AccountData accountInfo = await getAccount() as AccountData;
+    favList = accountInfo.favoriteBlogIds ?? [];
+    if (blogs != null) {
+      if (favList != null) {
+        for (var i = 0; i < blogs.length; i++) {
+          if (favList.contains(blogs[i].id)) {
+            checkFavList.add(blogs[i]);
+          }
+        }
+      }
+    }
+    return checkFavList;
   }
 
   Future<String> accountUpdate(String image, longtitude, latitude) async {
@@ -58,7 +78,7 @@ class AccountService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(
-          <String, dynamic>{"CategoryId": image ?? null, "Location": location}),
+          <String, dynamic>{"CategoryId": image, "Location": location}),
     );
     switch (response.statusCode) {
       case HttpStatus.ok:
@@ -68,7 +88,6 @@ class AccountService {
               null) {
             String message =
                 AccountUpdate.fromJson(jsonDecode(response.body)).message!;
-            print(message);
             return message;
           } else {
             print("data boş");

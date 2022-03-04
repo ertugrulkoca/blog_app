@@ -24,6 +24,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
+    // AccountService.instance.getFavoriBlogs();
     WidgetsBinding.instance!.addPostFrameCallback((val) {
       if (SharedManager.instance.getStringValue(SharedKeys.TOKEN).isNotEmpty) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -35,7 +36,7 @@ class _LoginViewState extends State<LoginView> {
     // BlogService.instance.getBlogs(null);
     // BlogService.instance.toggleFavorite("620ceebbc8312d04eec2be97");
     // AccountService.instance.getAccount();
-    AccountService.instance.accountUpdate("string", "string", "string");
+    // AccountService.instance.accountUpdate("string", "string", "string");
   }
 
   @override
