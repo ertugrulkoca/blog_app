@@ -1,13 +1,10 @@
-import 'package:provider/provider.dart';
-
+import 'package:geolocator/geolocator.dart';
 import '../helper/shared_manager.dart';
 import '../model/account_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-
 import '../model/blog_model.dart';
-import '../provider/favorities_provider.dart';
 import 'blog_service.dart';
 
 class AccountService {
@@ -34,7 +31,6 @@ class AccountService {
           if (Account.fromJson(jsonDecode(response.body)).data != null) {
             AccountData item =
                 Account.fromJson(jsonDecode(response.body)).data!;
-            print(item.image);
             return item;
           } else {
             print("data boş");
@@ -68,7 +64,7 @@ class AccountService {
     return checkFavList;
   }
 
-  Future<String> accountUpdate(String image, longtitude, latitude) async {
+  Future<String> accountUpdate(String image, latitude, longtitude) async {
     var url = Uri.http(_api, "/Account/Update");
     String token =
         await SharedManager.instance.getStringValue(SharedKeys.TOKEN);
@@ -105,5 +101,25 @@ class AccountService {
         break;
     }
     return "";
+  }
+
+  Future<List<String>> getLocation() async {
+    List<String> latLng = [];
+    AccountData data = await getAccount();
+    if (data.location != null) {
+      if (data.location!.latitude == "string" ||
+          data.location!.longtitude == "string") {
+        var gps = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        latLng.add(gps.latitude.toString());
+        latLng.add(gps.longitude.toString());
+      } else {
+        latLng.add(data.location!.latitude!);
+        latLng.add(data.location!.longtitude!);
+      }
+    }
+    await accountUpdate("string", latLng[0], latLng[1]);
+
+    return latLng;
   }
 }

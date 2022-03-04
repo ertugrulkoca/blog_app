@@ -72,8 +72,9 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       longtitude:
-          json['Longtitude'] != null ? json['Longtitude'] as String : null,
-      latitude: json['Latitude'] != null ? json['Latitude'] as String : null,
+          json['Longtitude'] != null ? json['Longtitude'] as String : "string",
+      latitude:
+          json['Latitude'] != null ? json['Latitude'] as String : "string",
     );
   }
 

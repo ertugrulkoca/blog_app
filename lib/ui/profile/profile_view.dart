@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:blog_app_assignment/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../core/helper/shared_manager.dart';
+import '../../core/service/account_service.dart';
+import '../components/dummy_pages.dart';
 import '../components/ui_components.dart';
 import '../login/components/login_components.dart';
 import '../login/login_view.dart';
@@ -22,6 +21,9 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   late LocationPermission permission;
+  Future<void> izin() async {
+    permission = await Geolocator.requestPermission();
+  }
 
   @override
   void initState() {
@@ -32,97 +34,142 @@ class _ProfileViewState extends State<ProfileView> {
     izin();
   }
 
-  Future<void> izin() async {
-    permission = await Geolocator.requestPermission();
+  GoogleMapController? _googleMapController;
+  @override
+  void dispose() {
+    _googleMapController!.dispose();
+    super.dispose();
   }
 
-  Future<void> konumaGit() async {
-    GoogleMapController controller = await haritaKontrol.future;
-    var gidilecekIsaret = const Marker(
-      markerId: MarkerId("id"),
-      position: LatLng(41.0039643, 28.4517462),
-      infoWindow: InfoWindow(title: "İstanbul", snippet: "Evim"),
-    );
-
-    setState(() {
-      isaretler.add(gidilecekIsaret);
-    });
-
-    var gidilecekKonum = await const CameraPosition(
-        target: LatLng(41.0039643, 28.4517462), zoom: 8);
-
-    controller.animateCamera(CameraUpdate.newCameraPosition(gidilecekKonum));
-  }
-
+  Marker? _markerLocation;
   Completer<GoogleMapController> haritaKontrol = Completer();
-  var baslangicKocum =
-      const CameraPosition(target: LatLng(41.0039643, 28.4517462), zoom: 8);
-  List<Marker> isaretler = <Marker>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context, "My Profile"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            customSizedBox(30),
-            GestureDetector(
-              onTap: () {
-                _alertImageAndButtons(context, () {
-                  _alertWithButtons(context, () {});
-                });
-              },
-              child: SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Stack(children: const [
-                    CircleAvatar(
-                        radius: 100,
-                        backgroundImage: AssetImage("assets/logo.png")),
-                    Padding(
-                        padding: EdgeInsets.only(bottom: 25, right: 25),
-                        child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Icon(Icons.camera_alt, size: 40)))
-                  ])),
-            ),
-            customSizedBox(20),
-            // Container(
-            //     color: Colors.grey,
-            //     width: double.infinity,
-            //     height: 200,
-            //     child: Image.asset("assets/background.png", fit: BoxFit.cover)),
-            SizedBox(
-              width: double.infinity,
-              height: 200,
-              child: GoogleMap(
-                  markers: Set<Marker>.of(isaretler),
-                  mapType: MapType.normal,
-                  initialCameraPosition: baslangicKocum,
-                  onMapCreated: (GoogleMapController controller) {
-                    haritaKontrol.complete(controller);
-                  }),
-            ),
-            customSizedBox(30),
-            //login view Components
-            loginRegisterButton(
-                "Save", dark, white, Icons.logout_rounded, () {}),
-            customSizedBox(20),
-            loginRegisterButton("Log Out", white, dark, Icons.logout_rounded,
-                () async {
-              await SharedManager.instance.clear();
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => LoginView()),
-                  (Route<dynamic> route) => false);
-            }),
-          ],
+        child: FutureBuilder<List<String>>(
+          future: AccountService.instance.getLocation(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                if (snapshot.hasData) {
+                  var list = snapshot.data;
+                  List<String> latLng = [];
+                  for (var item in list!) {
+                    latLng.add(item);
+                  }
+                  double latitude = double.parse(latLng[0]);
+                  double longitude = double.parse(latLng[1]);
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      customSizedBox(30),
+                      GestureDetector(
+                        onTap: () {
+                          _alertImageAndButtons(context, () {
+                            _alertWithButtons(context, () {});
+                          });
+                        },
+                        child: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: Stack(children: const [
+                              CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage:
+                                      AssetImage("assets/logo.png")),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(bottom: 25, right: 25),
+                                  child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Icon(Icons.camera_alt, size: 40)))
+                            ])),
+                      ),
+                      customSizedBox(20),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 200,
+                        child: GoogleMap(
+                          mapType: MapType.normal,
+                          markers: {
+                            if (_markerLocation != null) _markerLocation!
+                          },
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                _markerLocation == null
+                                    ? latitude
+                                    : _markerLocation!.position.latitude,
+                                _markerLocation == null
+                                    ? longitude
+                                    : _markerLocation!.position.longitude,
+                              ),
+                              zoom: 12),
+                          onMapCreated: (controller) =>
+                              _googleMapController = controller,
+                          onLongPress: _addMarker,
+                        ),
+                      ),
+                      customSizedBox(30),
+                      //login view Components
+                      loginRegisterButton(
+                          "Save", dark, white, Icons.logout_rounded, () async {
+                        if (_markerLocation != null) {
+                          if (_markerLocation!.position != null) {
+                            await AccountService.instance.accountUpdate(
+                                "string",
+                                _markerLocation!.position.latitude.toString(),
+                                _markerLocation!.position.longitude.toString());
+                          }
+                        }
+                      }),
+                      customSizedBox(20),
+                      loginRegisterButton(
+                          "Log Out", white, dark, Icons.logout_rounded,
+                          () async {
+                        await SharedManager.instance.clear();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginView()),
+                            (Route<dynamic> route) => false);
+                      }),
+                    ],
+                  );
+                } else {
+                  return notFoundWidget;
+                }
+              default:
+                return waitingWidget;
+            }
+          },
         ),
       ),
       bottomNavigationBar: buttomBar(context, 2),
     );
+  }
+
+  void _addMarker(LatLng pos) async {
+    if (_markerLocation == null) {
+      _markerLocation = Marker(
+        markerId: const MarkerId('location'),
+        infoWindow: const InfoWindow(title: 'location'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        position: pos,
+      );
+      setState(() {
+        _markerLocation = Marker(
+          markerId: const MarkerId('location'),
+          infoWindow: const InfoWindow(title: 'location'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          position: pos,
+        );
+      });
+    }
   }
 }
 
@@ -173,6 +220,5 @@ DialogButton alertButton(context, String text, IconData icon, Color textColor,
       ],
     ),
     onPressed: fun,
-    // onPressed: () => Navigator.pop(context),
   );
 }
