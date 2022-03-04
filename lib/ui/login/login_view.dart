@@ -37,6 +37,7 @@ class _LoginViewState extends State<LoginView> {
     // BlogService.instance.toggleFavorite("620ceebbc8312d04eec2be97");
     // AccountService.instance.getAccount();
     // AccountService.instance.accountUpdate("string", "string", "string");
+    AccountService.instance.getAccount();
   }
 
   @override

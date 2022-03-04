@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '../helper/shared_manager.dart';
 import '../model/account_model.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../model/blog_model.dart';
+import '../provider/favorities_provider.dart';
 import 'blog_service.dart';
 
 class AccountService {
@@ -31,6 +34,7 @@ class AccountService {
           if (Account.fromJson(jsonDecode(response.body)).data != null) {
             AccountData item =
                 Account.fromJson(jsonDecode(response.body)).data!;
+            print(item.image);
             return item;
           } else {
             print("data boş");
@@ -46,7 +50,7 @@ class AccountService {
     return AccountData();
   }
 
-  Future<List<BlogData>> getFavoriBlogs() async {
+  Future<List<BlogData>> getFavoriBlogs(bool state) async {
     List<BlogData> blogs = await BlogService.instance.getBlogs(null);
     List<String> favList = [];
     List<BlogData> checkFavList = [];

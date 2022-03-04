@@ -1,7 +1,10 @@
 import 'dart:io';
-
+import 'package:blog_app_assignment/core/provider/category_provider.dart';
+import 'package:blog_app_assignment/core/provider/image_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'core/helper/shared_manager.dart';
+import 'core/provider/favorities_provider.dart';
 import 'ui/login/login_view.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -17,22 +20,27 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await SharedManager.init();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme:
-            const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ImageModelPovider()),
+        ChangeNotifierProvider(create: (context) => CategoryModelProvider()),
+        ChangeNotifierProvider(create: (context) => FavoritiesModelProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme:
+              const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
+        ),
+        title: 'Blog App',
+        home: LoginView(),
       ),
-      title: 'Blog App',
-      home: LoginView(),
     );
   }
 }

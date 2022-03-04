@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:blog_app_assignment/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../core/helper/shared_manager.dart';
 import '../components/ui_components.dart';
@@ -19,6 +22,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   late LocationPermission permission;
+
   @override
   void initState() {
     super.initState();

@@ -1,4 +1,6 @@
+import 'package:blog_app_assignment/core/provider/category_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/model/blog_category_model.dart';
 import '../../core/service/blog_service.dart';
 import '../components/dummy_pages.dart';
@@ -45,37 +47,78 @@ class HomeView extends StatelessWidget {
                 for (var item in list!) {
                   categoryList.add(item);
                 }
-                return ListView.builder(
-                  itemCount: categoryList.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    //model variables
-                    String img = categoryList[index].image ??
-                        "https://dummyimage.com/600x400/000/fff";
-                    String title = categoryList[index].title ?? "";
-                    //provider
-                    String? categoryID = categoryList[index].id;
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              img,
-                              fit: BoxFit.fill,
-                              height: 100,
-                              width: 170,
+                return Consumer<CategoryModelProvider>(
+                    builder: (context, value, child) {
+                  return ListView.builder(
+                    itemCount: categoryList.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      //model variables
+                      String img = categoryList[index].image ??
+                          "https://dummyimage.com/600x400/000/fff";
+                      String title = categoryList[index].title ?? "";
+                      //provider
+                      String? categoryID = categoryList[index].id;
+                      return GestureDetector(
+                        onTap: () {
+                          value.changeCategory(categoryID);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.network(
+                                  img,
+                                  fit: BoxFit.fill,
+                                  height: 100,
+                                  width: 170,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(title),
+                              ],
                             ),
-                            const SizedBox(height: 10),
-                            Text(title),
-                          ],
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                  );
+                }
+                    // child: ListView.builder(
+                    //   itemCount: categoryList.length,
+                    //   shrinkWrap: true,
+                    //   scrollDirection: Axis.horizontal,
+                    //   itemBuilder: (context, index) {
+                    //     //model variables
+                    //     String img = categoryList[index].image ??
+                    //         "https://dummyimage.com/600x400/000/fff";
+                    //     String title = categoryList[index].title ?? "";
+                    //     //provider
+                    //     String? categoryID = categoryList[index].id;
+
+                    //     return Padding(
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       child: Container(
+                    //         child: Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Image.network(
+                    //               img,
+                    //               fit: BoxFit.fill,
+                    //               height: 100,
+                    //               width: 170,
+                    //             ),
+                    //             const SizedBox(height: 10),
+                    //             Text(title),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     );
-                  },
-                );
               } else {
                 return notFoundWidget;
               }
