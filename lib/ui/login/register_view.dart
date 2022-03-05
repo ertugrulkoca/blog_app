@@ -1,7 +1,9 @@
 import 'package:blog_app_assignment/ui/components/ui_components.dart';
 import 'package:blog_app_assignment/ui/login/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/constants.dart';
+import '../../core/provider/login_provider.dart';
 import '../../core/service/login_service.dart';
 import '../home/home_view.dart';
 import 'components/login_components.dart';
@@ -24,20 +26,36 @@ class RegisterView extends StatelessWidget {
             children: [
               Image.asset("assets/logo.png", width: 230, height: 230),
               customSizedBox(20),
-              textField("Email", email,
-                  Icon(Icons.mail, color: Colors.grey.shade400), null),
-              customSizedBox(20),
               textField(
-                  "Password",
-                  password,
-                  Icon(Icons.lock, color: Colors.grey.shade400),
-                  Icon(Icons.remove_red_eye, color: Colors.grey.shade400)),
+                  "Email",
+                  email,
+                  Icon(Icons.mail, color: Colors.grey.shade400),
+                  null,
+                  false,
+                  20.0,
+                  20.0),
               customSizedBox(20),
-              textField(
-                  "RePassword",
-                  rePassword,
-                  Icon(Icons.lock, color: Colors.grey.shade400),
-                  Icon(Icons.remove_red_eye, color: Colors.grey.shade400)),
+              Consumer<LoginModelProvider>(builder: (context, value, child) {
+                return textField(
+                    "Password",
+                    password,
+                    Icon(Icons.lock, color: Colors.grey.shade400),
+                    Icon(Icons.remove_red_eye, color: Colors.grey.shade400),
+                    value.getObsecureText(),
+                    20.0,
+                    20.0);
+              }),
+              customSizedBox(20),
+              Consumer<LoginModelProvider>(builder: (context, value, child) {
+                return textField(
+                    "RePassword",
+                    rePassword,
+                    Icon(Icons.lock, color: Colors.grey.shade400),
+                    Icon(Icons.remove_red_eye, color: Colors.grey.shade400),
+                    value.getObsecureText(),
+                    20.0,
+                    20.0);
+              }),
               customSizedBox(30),
               loginRegisterButton("Register", white, dark, Icons.login,
                   (() async {

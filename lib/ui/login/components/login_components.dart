@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/constants.dart';
+import '../../../core/provider/login_provider.dart';
 
 AppBar appBarLogin(String text) {
   return AppBar(
@@ -11,17 +13,32 @@ AppBar appBarLogin(String text) {
   );
 }
 
-TextField textField(
-    String text, TextEditingController controlller, Icon prefIcon, sufIcon) {
-  return TextField(
-    controller: controlller,
-    decoration: InputDecoration(
-        hintText: text,
-        prefixIcon: prefIcon,
-        suffixIcon: sufIcon,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: dark))),
+Consumer textField(String text, TextEditingController controlller,
+    Icon prefIcon, sufIcon, bool obsecureText, double height, width) {
+  return Consumer<LoginModelProvider>(
+    builder: (context, value, child) {
+      return TextField(
+        controller: controlller,
+        obscureText:
+            obsecureText == false ? obsecureText : value.getObsecureText(),
+        decoration: InputDecoration(
+            hintText: text,
+            prefixIcon: prefIcon,
+            suffixIcon: SizedBox(
+              height: height,
+              width: width,
+              child: GestureDetector(
+                onTap: () {
+                  value.changeObsecureText(!value.getObsecureText());
+                },
+                child: sufIcon,
+              ),
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: dark))),
+      );
+    },
   );
 }
 

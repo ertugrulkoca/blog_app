@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/helper/shared_manager.dart';
 import 'core/provider/favorities_provider.dart';
+import 'core/provider/login_provider.dart';
 import 'ui/login/login_view.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -28,9 +29,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ImageModelPovider()),
+        // ChangeNotifierProvider(create: (context) => ImageModelPovider()),
         ChangeNotifierProvider(create: (context) => CategoryModelProvider()),
         ChangeNotifierProvider(create: (context) => FavoritiesModelProvider()),
+        ChangeNotifierProvider(create: (context) => LoginModelProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
