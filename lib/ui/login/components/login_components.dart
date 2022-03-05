@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../../../constants/constants.dart';
 import '../../../core/provider/login_provider.dart';
@@ -13,6 +14,9 @@ AppBar appBarLogin(String text) {
   );
 }
 
+//  obsecure text için provider kullanımı.
+//  gönderilen obsecureText parametresi email için
+//  height ve width GestureDetector için
 Consumer textField(String text, TextEditingController controlller,
     Icon prefIcon, sufIcon, bool obsecureText, double height, width) {
   return Consumer<LoginModelProvider>(
@@ -74,4 +78,22 @@ SizedBox loginRegisterButton(String text, Color textColor,
       ),
     ),
   );
+}
+
+loginAlert(context, String text) {
+  Alert(
+    context: context,
+    type: AlertType.error,
+    title: text,
+    buttons: [
+      DialogButton(
+        child: const Text(
+          "OK",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        width: 120,
+      )
+    ],
+  ).show();
 }

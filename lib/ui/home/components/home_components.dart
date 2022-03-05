@@ -9,6 +9,7 @@ import '../../../core/service/blog_service.dart';
 import '../../components/dummy_pages.dart';
 import '../article_detail_view.dart';
 
+// home view kategori listesi ve PROVIDER kullanımı.
 SizedBox categoriListView() {
   return SizedBox(
     height: 170,
@@ -18,11 +19,14 @@ SizedBox categoriListView() {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             if (snapshot.hasData) {
+              // snapshot'dan gelen datalar listeye atılıyor
               var list = snapshot.data;
               List<BlogCategoryData> categoryList = [];
               for (var item in list!) {
                 categoryList.add(item);
               }
+
+              // kategoriye göre filtrelemek için PROVIDER kullanımı.
               return Consumer<CategoryModelProvider>(
                   builder: (context, value, child) {
                 return ListView.builder(
@@ -35,26 +39,32 @@ SizedBox categoriListView() {
                         "https://dummyimage.com/600x400/000/fff";
                     String title = categoryList[index].title ?? "";
                     String? categoryID = categoryList[index].id;
+
                     return GestureDetector(
                       onTap: () {
+                        // kategori değişikliğini anlama.
                         value.changeCategory(categoryID);
+
+                        // seçilen kategori için uyarı mesajı
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('category ${index + 1} selected'),
+                        ));
                       },
+                      // kategori değişkenleri.
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                img,
-                                fit: BoxFit.fill,
-                                height: 100,
-                                width: 170,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(title),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.network(
+                              img,
+                              fit: BoxFit.fill,
+                              height: 100,
+                              width: 170,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(title),
+                          ],
                         ),
                       ),
                     );
@@ -62,6 +72,7 @@ SizedBox categoriListView() {
                 );
               });
             } else {
+              // datada sorun olursa gösterilecek sayfa.
               return notFoundWidget;
             }
           default:
@@ -82,23 +93,27 @@ Padding blogText() {
   );
 }
 
+// kategori id ye göre sıralamak için PROVIDER kullanımı.
+// eğer seçilen kategori yok ise value.getCategoryID() null döner.
 Padding articleGridView(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(10.0),
     child: Consumer<CategoryModelProvider>(builder: (context, value, child) {
       return FutureBuilder<List<BlogData>>(
+          //kategori kontrol
           future: BlogService.instance.getBlogs(value.getCategoryID()),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 if (snapshot.hasData) {
+                  // snapshot'dan gelen datalar listeye atılıyor
                   var list = snapshot.data;
                   List<BlogData> blogList = [];
                   for (var item in list!) {
                     blogList.add(item);
                   }
+
                   return GridView.builder(
-                    // physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -113,14 +128,15 @@ Padding articleGridView(BuildContext context) {
                           "https://dummyimage.com/600x400/000/fff";
                       String title = blogList[index].title ?? "";
                       String id = blogList[index].id ?? "0";
+
                       return articleContainer(
                           context, img, title, id, blogList[index]);
                     },
                   );
                 } else {
+                  // datada sorun olursa gösterilecek sayfa.
                   return notFoundWidget;
                 }
-
               default:
                 return waitingWidget;
             }
@@ -129,13 +145,10 @@ Padding articleGridView(BuildContext context) {
   );
 }
 
+//apiden dönen değerlerin yerleştirilmesi için articleContainer().
 GestureDetector articleContainer(
     BuildContext context, String img, title, id, BlogData article) {
   return GestureDetector(
-    onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ArtivleView(article)));
-    },
     child: Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -144,16 +157,30 @@ GestureDetector articleContainer(
         children: [articleName(title), favoriteIcon(id)],
       ),
     ),
+    onTap: () {
+      //tıklanılan makalenin sayfasına geçiş.
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ArtivleView(article)));
+    },
   );
 }
 
+//  makalenin favoriye alınıp çıkartılması için PROVIDER kullanımı.
 Align favoriteIcon(String id) {
   return Align(
     alignment: Alignment.topRight,
     child: Consumer<FavoritiesModelProvider>(builder: (context, value, child) {
       return GestureDetector(
-        onTap: () {
-          BlogService.instance.toggleFavorite(id);
+        onTap: () async {
+          //id ye göre favorilere ekleme yada çıkartma işlemi.
+          String message = await BlogService.instance.toggleFavorite(id);
+
+          //ekleme yada çıkarma işlemi için göre snackBar uyarı mesajı
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(message),
+          ));
+
+          // değişikliği dinlemek için provider.
           value.changefavState(!value.getfavState());
         },
         child: const Padding(

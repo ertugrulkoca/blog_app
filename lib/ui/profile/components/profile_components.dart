@@ -21,14 +21,15 @@ GestureDetector profilePicture(BuildContext context) {
       ),
     ),
     onTap: () {
-      alertImageAndButtons(context, () {
-        alertWithButtons(context, () {});
+      // profile modal ve profile pop up için alert.
+      profileModal(context, () {
+        profilePopUp(context, () {});
       });
     },
   );
 }
 
-alertImageAndButtons(context, void Function() fun) {
+profileModal(context, void Function() fun) {
   Alert(
     context: context,
     image: Image.asset(
@@ -44,7 +45,7 @@ alertImageAndButtons(context, void Function() fun) {
   ).show();
 }
 
-alertWithButtons(context, void Function() fun) {
+profilePopUp(context, void Function() fun) {
   Alert(
     context: context,
     title: "Select a Picture",
@@ -56,6 +57,7 @@ alertWithButtons(context, void Function() fun) {
   ).show();
 }
 
+// profileModal ve profilePopUp için ortak buton.
 DialogButton alertButton(context, String text, IconData icon, Color textColor,
     backgroundColor, void Function() fun) {
   return DialogButton(

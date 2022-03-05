@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:blog_app_assignment/core/provider/category_provider.dart';
-import 'package:blog_app_assignment/core/provider/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/helper/shared_manager.dart';
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // ChangeNotifierProvider(create: (context) => ImageModelPovider()),
         ChangeNotifierProvider(create: (context) => CategoryModelProvider()),
         ChangeNotifierProvider(create: (context) => FavoritiesModelProvider()),
         ChangeNotifierProvider(create: (context) => LoginModelProvider()),

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../core/helper/shared_manager.dart';
 import '../../core/service/account_service.dart';
 import '../components/dummy_pages.dart';
@@ -21,6 +20,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  //  lokasyon işlemleri için izin.
   late LocationPermission permission;
   Future<void> gpsPermission() async {
     permission = await Geolocator.requestPermission();
@@ -55,11 +55,13 @@ class _ProfileViewState extends State<ProfileView> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 if (snapshot.hasData) {
+                  // snapshot'dan gelen datalar listeye atılıyor
                   var list = snapshot.data;
                   List<String> latLng = [];
                   for (var item in list!) {
                     latLng.add(item);
                   }
+                  // enlem ve boylam bilgisinin değişkenlere atılması
                   double latitude = double.parse(latLng[0]);
                   double longitude = double.parse(latLng[1]);
 
@@ -72,10 +74,13 @@ class _ProfileViewState extends State<ProfileView> {
                       customSizedBox(20),
                       googleMapContainer(latitude, longitude),
                       customSizedBox(30),
+                      // SAVE Button
                       loginRegisterButton(
                           "Save", dark, white, Icons.logout_rounded, () async {
+                        //markerın boş olup olmadığı kontrol edilir.
                         if (_markerLocation != null) {
                           if (_markerLocation!.position != null) {
+                            // seçilen konum bilgisi apiye gönderilir.
                             await AccountService.instance.accountUpdate(
                                 "string",
                                 _markerLocation!.position.latitude.toString(),
@@ -84,10 +89,13 @@ class _ProfileViewState extends State<ProfileView> {
                         }
                       }),
                       customSizedBox(20),
+                      // LOG OUT buton
                       loginRegisterButton(
                           "Log Out", white, dark, Icons.logout_rounded,
                           () async {
+                        // kaydedilen token temizlenir.
                         await SharedManager.instance.clear();
+                        // çıkış yapılır, login sayfasına yönlendirilir.
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => LoginView()),
@@ -96,6 +104,7 @@ class _ProfileViewState extends State<ProfileView> {
                     ],
                   );
                 } else {
+                  // datada sorun olursa gösterilecek sayfa
                   return notFoundWidget;
                 }
               default:
@@ -114,7 +123,10 @@ class _ProfileViewState extends State<ProfileView> {
       height: 200,
       child: GoogleMap(
         mapType: MapType.normal,
+        // markerın boş olup olmadığı kontrol edilir.
         markers: {if (_markerLocation != null) _markerLocation!},
+        // CameraPosition için eğer marker null ise apiden gelen konum gösterilir.
+        // eğer markern seçili ise o konum gösterilir.
         initialCameraPosition: CameraPosition(
             target: LatLng(
               _markerLocation == null
@@ -131,6 +143,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
+  //seçilen konum için marker fonksiyonu
   void _addMarker(LatLng pos) async {
     if (_markerLocation == null) {
       _markerLocation = Marker(

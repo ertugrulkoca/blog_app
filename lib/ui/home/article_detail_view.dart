@@ -17,20 +17,22 @@ class _ArtivleViewState extends State<ArtivleView> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: appBar(context, "Home"),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SizedBox(
-          height: size.height,
-          width: double.infinity,
-          child: Column(
-            children: [
-              Text(widget.article.title ?? "",
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20),
-              Text(parseHtmlString(widget.article.content!),
-                  style: const TextStyle(fontSize: 16))
-            ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SizedBox(
+            height: size.height,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Text(widget.article.title ?? "",
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 20),
+                Text(parseHtmlString(widget.article.content!),
+                    style: const TextStyle(fontSize: 16))
+              ],
+            ),
           ),
         ),
       ),
@@ -38,6 +40,7 @@ class _ArtivleViewState extends State<ArtivleView> {
     );
   }
 
+  //  metnin html etiketlerinden arındırılma işlemi.
   String parseHtmlString(String htmlString) {
     String parsedHtml = Bidi.stripHtmlIfNeeded(htmlString);
     return parsedHtml;

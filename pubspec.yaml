@@ -29,15 +29,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rflutter_alert: ^2.0.4
+
+  # state management
+  provider: ^6.0.2
+
+  # lokasyon
   geolocator: ^8.2.0
   google_maps_flutter: ^2.1.2
+
+  # network
   http: ^0.13.4
-  shared_preferences: ^2.0.12
-  intl: ^0.17.0
-  image_picker: ^0.8.4+10
-  provider: ^6.0.2
   dio: ^4.0.4
+
+  #alert
+  rflutter_alert: ^2.0.4
+
+  #html pars
+  intl: ^0.17.0
+
+  #local storage
+  shared_preferences: ^2.0.12
+
+  # pick image
+  image_picker: ^0.8.4+10
+  
 
 
   # The following adds the Cupertino Icons font to your application.

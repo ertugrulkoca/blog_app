@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import '../../constants/constants.dart';
 import '../../core/helper/shared_manager.dart';
 import '../../core/provider/login_provider.dart';
-import '../../core/service/account_service.dart';
-import '../../core/service/blog_service.dart';
 import '../../core/service/login_service.dart';
 import '../components/ui_components.dart';
 import 'components/login_components.dart';
@@ -37,7 +35,6 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context, "Login"),
-      // appBar: appBarLogin("Login"),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -56,6 +53,7 @@ class _LoginViewState extends State<LoginView> {
                   20.0,
                   20.0),
               customSizedBox(20),
+              //  obsecure text için provider
               Consumer<LoginModelProvider>(
                 builder: (context, value, child) {
                   return textField(
@@ -80,9 +78,11 @@ class _LoginViewState extends State<LoginView> {
                         (Route<dynamic> route) => false);
                   } else {
                     print("kullanıcı adı ve şifre hatalı");
+                    loginAlert(context, "MAIL OR PASSWORD WRONG");
                   }
                 } else {
                   print("eksik bilgiler");
+                  loginAlert(context, "MISSING INFORMATION");
                 }
               })),
               customSizedBox(20),

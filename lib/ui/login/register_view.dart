@@ -35,6 +35,7 @@ class RegisterView extends StatelessWidget {
                   20.0,
                   20.0),
               customSizedBox(20),
+              //  obsecure text için provider
               Consumer<LoginModelProvider>(builder: (context, value, child) {
                 return textField(
                     "Password",
@@ -46,6 +47,7 @@ class RegisterView extends StatelessWidget {
                     20.0);
               }),
               customSizedBox(20),
+              //  obsecure text için provider
               Consumer<LoginModelProvider>(builder: (context, value, child) {
                 return textField(
                     "RePassword",
@@ -70,17 +72,15 @@ class RegisterView extends StatelessWidget {
                           (Route<dynamic> route) => false);
                     } else {
                       print("kullanıcı adı ve şifre hatalı");
+                      loginAlert(context, "MAIL OR PASSWORD WRONG");
                     }
                   } else {
                     print("parola eşleşmiyor");
+                    loginAlert(context, "Password does not match");
                   }
                 } else {
-                  print("eksik bilgiler");
+                  loginAlert(context, "MISSING INFORMATION");
                 }
-
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeView()),
-                    (Route<dynamic> route) => false);
               })),
               customSizedBox(20),
               loginRegisterButton("Login", dark, white, Icons.login, (() {
