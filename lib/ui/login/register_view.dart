@@ -63,27 +63,32 @@ class RegisterView extends StatelessWidget {
                   (() async {
                 if (email.text != null && password.text != null) {
                   if (password.text == rePassword.text) {
+                    // kayıt işleminin başarılı olup olmadığı kontrol edilir
                     bool isSigned = await LoginService.instance
                         .register(email.text, password.text);
                     if (isSigned == true) {
+                      // eğer başarılı ise homeview a yönlendirilir.
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const HomeView()),
                           (Route<dynamic> route) => false);
                     } else {
-                      print("kullanıcı adı ve şifre hatalı");
-                      loginAlert(context, "MAIL OR PASSWORD WRONG");
+                      // hata mesajı
+                      loginAlert(context, "INVALID MAIL OR PASSWORD");
                     }
                   } else {
-                    print("parola eşleşmiyor");
+                    // hata mesajı
                     loginAlert(context, "Password does not match");
                   }
                 } else {
+                  // hata mesajı
                   loginAlert(context, "MISSING INFORMATION");
                 }
               })),
               customSizedBox(20),
+              // Login butonu
               loginRegisterButton("Login", dark, white, Icons.login, (() {
+                // LoginView a geçiş
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LoginView()));
               })),

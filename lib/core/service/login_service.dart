@@ -13,6 +13,8 @@ class LoginService {
 
   Future<bool> login(String email, password) async {
     var url = Uri.http(_api, "/Login/SignIn");
+
+    // email ve şifre apiye post edilir
     final response = await http.post(
       url,
       headers: {
@@ -30,6 +32,7 @@ class LoginService {
             print("sign data yok");
           } else {
             if (Sign.fromJson(jsonDecode(response.body)).data!.token != null) {
+              // işlem başarılı ise gelen tokeni shared preferences ile kaydediyoruz.
               _token = Sign.fromJson(jsonDecode(response.body)).data!.token!;
               await SharedManager.instance.saveString(SharedKeys.TOKEN, _token);
 
@@ -51,6 +54,8 @@ class LoginService {
 
   Future<bool> register(String email, password) async {
     var url = Uri.http(_api, "/Login/SignUp");
+
+    // email ve şifre apiye post edilir
     final response = await http.post(
       url,
       headers: {
@@ -72,6 +77,7 @@ class LoginService {
             print("sign data yok");
           } else {
             if (Sign.fromJson(jsonDecode(response.body)).data!.token != null) {
+              // işlem başarılı ise gelen tokeni shared preferences ile kaydediyoruz.
               _token = Sign.fromJson(jsonDecode(response.body)).data!.token!;
               await SharedManager.instance.saveString(SharedKeys.TOKEN, _token);
 

@@ -14,8 +14,11 @@ class BlogService {
 
   Future<List<BlogCategoryData>> getCategories() async {
     var url = Uri.http(_api, "/Blog/GetCategories");
+
+    // kaydedilen tokene erişim
     String token =
         await SharedManager.instance.getStringValue(SharedKeys.TOKEN);
+
     final response = await http.get(
       url,
       headers: {
@@ -30,6 +33,7 @@ class BlogService {
             BlogCategory.fromJson(jsonDecode(response.body)).hasError ?? false;
         if (hasError == false) {
           if (BlogCategory.fromJson(jsonDecode(response.body)).data != null) {
+            // data null değilse json verisinin pars edilme işlemi.
             List<BlogCategoryData> items =
                 BlogCategory.fromJson(jsonDecode(response.body)).data!;
             return items;
@@ -52,8 +56,11 @@ class BlogService {
 
   Future<List<BlogData>> getBlogs(String? id) async {
     var url = Uri.http(_api, "/Blog/GetBlogs");
+
+    // kaydedilen tokene erişim
     String token =
         await SharedManager.instance.getStringValue(SharedKeys.TOKEN);
+
     final response = await http.post(
       url,
       headers: {
@@ -69,6 +76,7 @@ class BlogService {
             Blogs.fromJson(jsonDecode(response.body)).hasError ?? false;
         if (hasError == false) {
           if (Blogs.fromJson(jsonDecode(response.body)).data != null) {
+            // data null değilse json verisinin pars edilme işlemi.
             List<BlogData> items =
                 Blogs.fromJson(jsonDecode(response.body)).data!;
             return items;
@@ -91,6 +99,8 @@ class BlogService {
 
   Future<String> toggleFavorite(String id) async {
     var url = Uri.http(_api, "/Blog/ToggleFavorite");
+
+    // kaydedilen tokene erişim
     String token =
         await SharedManager.instance.getStringValue(SharedKeys.TOKEN);
     final response = await http.post(
@@ -108,6 +118,7 @@ class BlogService {
             false) {
           if (ToggleFavorite.fromJson(jsonDecode(response.body)).message !=
               null) {
+            // data null değilse json verisinin pars edilme işlemi.
             String mesaj =
                 ToggleFavorite.fromJson(jsonDecode(response.body)).message!;
             return mesaj;

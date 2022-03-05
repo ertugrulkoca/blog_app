@@ -40,7 +40,9 @@ profileModal(context, void Function() fun) {
     ),
     buttons: [
       alertButton(context, "Select", Icons.login, white, dark, fun),
-      alertButton(context, "Remove", Icons.login, dark, white, fun)
+      alertButton(context, "Remove", Icons.login, dark, white, () {
+        Navigator.pop(context);
+      })
     ],
   ).show();
 }

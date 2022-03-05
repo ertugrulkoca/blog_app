@@ -81,10 +81,16 @@ class _ProfileViewState extends State<ProfileView> {
                         if (_markerLocation != null) {
                           if (_markerLocation!.position != null) {
                             // seçilen konum bilgisi apiye gönderilir.
-                            await AccountService.instance.accountUpdate(
-                                "string",
-                                _markerLocation!.position.latitude.toString(),
-                                _markerLocation!.position.longitude.toString());
+                            String message = await AccountService.instance
+                                .accountUpdate(
+                                    "string",
+                                    _markerLocation!.position.latitude
+                                        .toString(),
+                                    _markerLocation!.position.longitude
+                                        .toString());
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(message),
+                            ));
                           }
                         }
                       }),

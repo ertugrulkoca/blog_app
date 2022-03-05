@@ -15,7 +15,7 @@ AppBar appBarLogin(String text) {
 }
 
 //  obsecure text için provider kullanımı.
-//  gönderilen obsecureText parametresi email için
+//  gönderilen obsecureText parametresi sadec email içindir.
 //  height ve width GestureDetector için
 Consumer textField(String text, TextEditingController controlller,
     Icon prefIcon, sufIcon, bool obsecureText, double height, width) {
@@ -23,6 +23,7 @@ Consumer textField(String text, TextEditingController controlller,
     builder: (context, value, child) {
       return TextField(
         controller: controlller,
+        // gönderilen obsecureText false ise mail için textField'dır, değil ise password textField'dir.
         obscureText:
             obsecureText == false ? obsecureText : value.getObsecureText(),
         decoration: InputDecoration(
@@ -33,6 +34,7 @@ Consumer textField(String text, TextEditingController controlller,
               width: width,
               child: GestureDetector(
                 onTap: () {
+                  // parolanın gizli - görünür durumuna getirilmesi ve provider ile dinlenilmesi.
                   value.changeObsecureText(!value.getObsecureText());
                 },
                 child: sufIcon,
@@ -80,6 +82,7 @@ SizedBox loginRegisterButton(String text, Color textColor,
   );
 }
 
+// login uyarıları için alert
 loginAlert(context, String text) {
   Alert(
     context: context,

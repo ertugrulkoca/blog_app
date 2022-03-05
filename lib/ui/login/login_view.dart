@@ -69,24 +69,28 @@ class _LoginViewState extends State<LoginView> {
               customSizedBox(30),
               loginRegisterButton("Login", white, dark, Icons.login, (() async {
                 if (email.text != null && password.text != null) {
+                  // giriş işleminin başarılı olup olmadığı kontrol edilir
                   bool isSigned = await LoginService.instance
                       .login(email.text, password.text);
                   if (isSigned == true) {
+                    //eğer başarılı ise homeview a yönlendirilir.
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => const HomeView()),
                         (Route<dynamic> route) => false);
                   } else {
-                    print("kullanıcı adı ve şifre hatalı");
-                    loginAlert(context, "MAIL OR PASSWORD WRONG");
+                    //hata mesajı
+                    loginAlert(context, "INVALID MAIL OR PASSWORD");
                   }
                 } else {
-                  print("eksik bilgiler");
+                  //hata mesajı
                   loginAlert(context, "MISSING INFORMATION");
                 }
               })),
               customSizedBox(20),
+              //register butonu
               loginRegisterButton("Register", dark, white, Icons.login, (() {
+                //register view a geçiş
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => RegisterView()));
               })),
