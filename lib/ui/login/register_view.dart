@@ -15,7 +15,6 @@ class RegisterView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context, "Login"),
-      // appBar: appBarLogin("Login"),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

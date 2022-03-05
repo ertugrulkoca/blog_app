@@ -9,12 +9,10 @@ class ImageModelPovider extends ChangeNotifier {
   }
 
   void uploadImg(ImageSource imageSource) async {
-    print("uploadImg $imageSource");
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      print("picked file nul değil ${pickedFile.path}");
       var response = await ImgService.instance.uploadImgToApi(pickedFile.path);
       print(response);
     }

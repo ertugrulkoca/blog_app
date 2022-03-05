@@ -10,8 +10,6 @@ import 'components/login_components.dart';
 import 'register_view.dart';
 
 class LoginView extends StatefulWidget {
-  LoginView({Key? key}) : super(key: key);
-
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -24,7 +22,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    // AccountService.instance.getFavoriBlogs();
     WidgetsBinding.instance!.addPostFrameCallback((val) {
       if (SharedManager.instance.getStringValue(SharedKeys.TOKEN).isNotEmpty) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -32,12 +29,6 @@ class _LoginViewState extends State<LoginView> {
             (Route<dynamic> route) => false);
       }
     });
-    // BlogService.instance.getCategories();
-    // BlogService.instance.getBlogs(null);
-    // BlogService.instance.toggleFavorite("620ceebbc8312d04eec2be97");
-    // AccountService.instance.getAccount();
-    // AccountService.instance.accountUpdate("string", "string", "string");
-    // AccountService.instance.getAccount();
   }
 
   @override

@@ -12,7 +12,7 @@ AppBar appBar(BuildContext context, String text) {
           color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
     ),
     iconTheme: const IconThemeData(
-      color: Colors.black, //change your color here
+      color: Colors.black,
     ),
   );
 }
